@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import data from '../../public/data.json';
 import '../../assets/scss/astro-ecommerce.scss';
-import Navbar from '../components/navbar';
+import NavbarDashboard from '../components/navbar_dashboard';
 import Footer from '../components/footer';
 import StoreNavbar from '../components/store/storeNavbar';
 import CardProduct from '../components/products/cardProduct';
@@ -76,9 +76,17 @@ data.orders.forEach((order) => {
 
 <Layout title="Astro Ecommerce">
 	<main>
-    <Navbar />
+    <NavbarDashboard client:load/>
+    
     <div class="container mt-5">
-
+      <div class="row">
+        <div class="my-2">
+          <CategoryFilters 
+            title={data.products[0].title}
+            client:load
+          />
+        </div>
+      </div>
       <div class="row">
         {data.products.map(product => 
           <div class="col-md-6 col-lg-3">

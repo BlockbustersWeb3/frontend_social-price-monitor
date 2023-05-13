@@ -1,33 +1,38 @@
 import React from 'react'
-import { useState } from 'react'
 import { ethers } from 'ethers'
+import { addressWallet, setAddressWallet } from '../storage/sesion.js'
 
 export default function Navbar(props) {
 
-  const [walletAddress, setWalletAddress] = useState("")
-
+  console.log(addressWallet.value)
   /**
    * Request access to the User's META MASK WALLET
    */
   async function requestAccount() {
     //Check if the Meta Mask Extensions exists
     if(window.ethereum){
-      console.log("detected")
+      
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       })
-      setWalletAddress(accounts[0])
+      setAddressWallet(accounts[0])
     }else{
       console.log("Meta Mask not detected")
     }
   }
 
   async function connectWallet(){
-    if(typeof window.ethereum !== 'undefined'){
-      await requestAccount();
-      //Provider to interact with the smart contract
-      //const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const web3Provider = new ethers.BrowserProvider(window.ethereum);
+    if(addressWallet.value != ""){
+      console.log("Redirecting to the products home");
+      window.location.href = "/product-home";
+    }else{
+      if(typeof window.ethereum !== 'undefined'){
+      
+        await requestAccount();
+        //Provider to interact with the smart contract
+        //const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const web3Provider = new ethers.BrowserProvider(window.ethereum);
+      }
     }
   }
 
@@ -59,7 +64,7 @@ export default function Navbar(props) {
                 aria-current="page"
                 id="btn-connection-wallet"
                 onClick={connectWallet}>
-                  Connect Wallet
+                  {addressWallet.value != ""? "Go to products" : "Connect Wallet"}
               </button>
             </li>
           </ul>

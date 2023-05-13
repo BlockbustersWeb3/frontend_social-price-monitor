@@ -6,6 +6,7 @@ export default function ProductOverview({
   title,
 }: Props) {
 
+
   return (
     <>
       <div className="card card-product card-plain">

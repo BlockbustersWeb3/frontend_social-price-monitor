@@ -4,6 +4,34 @@ export interface Props {
 }
 
 const { title } = Astro.props;
+
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyA_aqjmvlLJjPHj6_07rHpctUj-VjffmEA",
+  authDomain: "socialpricemonitor.firebaseapp.com",
+  projectId: "socialpricemonitor",
+  storageBucket: "socialpricemonitor.appspot.com",
+  messagingSenderId: "284980640714",
+  appId: "1:284980640714:web:797c4aff94598585922d33"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const docRef = doc(db, "categories", "1");
+const docSnap = await getDoc(docRef);
+
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+} else {
+  // docSnap.data() will be undefined in this case
+  console.log("No such document!");
+}
 ---
 
 <!DOCTYPE html>
