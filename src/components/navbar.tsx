@@ -4,7 +4,6 @@ import { addressWallet, setAddressWallet } from '../storage/sesion.js'
 
 export default function Navbar(props) {
 
-  console.log(addressWallet.value)
   /**
    * Request access to the User's META MASK WALLET
    */
@@ -31,7 +30,8 @@ export default function Navbar(props) {
         await requestAccount();
         //Provider to interact with the smart contract
         //const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const web3Provider = new ethers.BrowserProvider(window.ethereum);
+        // const web3Provider = new ethers.BrowserProvider(window.ethereum);
+        window.location.href = "/product-home";
       }
     }
   }

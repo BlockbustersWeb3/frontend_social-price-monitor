@@ -28,6 +28,8 @@ import OrderSummaries from '../components/order/orderSummaries';
 import OrderHistory from '../components/order/orderHistory';
 import IncentiveLarge from '../components/incentives/incentiveLarge';
 import IncentiveCols from '../components/incentives/incentiveCols';
+import MainContainer from '../components/authentication/MainContainer';
+import CategoryFilter from '../components/products/CategoryFilter';
 
 let cartItems = [];
 data.shoppingCart.map(id => 
@@ -64,7 +66,7 @@ data.orders.forEach((order) => {
 })
 
 ---
-<script>
+<!-- <script>
   function toggleHeart(e) {
     e.target.classList.toggle('fas');
     e.target.classList.toggle('far');
@@ -72,37 +74,26 @@ data.orders.forEach((order) => {
   }
   
   document.getElementById('heart1').addEventListener("click", toggleHeart);
-</script>
+</script> -->
 
 <Layout title="Astro Ecommerce">
-	<main>
+	<MainContainer>
     <NavbarDashboard client:load/>
     
     <div class="container mt-5">
       <div class="row">
         <div class="my-2">
-          <CategoryFilters 
+          <CategoryFilter client:load>
+          </CategoryFilter>
+          <!-- <CategoryFilters 
             title={data.products[0].title}
             client:load
-          />
+          /> -->
         </div>
       </div>
       <div class="row">
-        {data.products.map(product => 
-          <div class="col-md-6 col-lg-3">
-            <CardProduct 
-              thumb_src = {product.thumb_src}
-              thumb_alt = {product.thumb_alt}
-              color = {product.color}
-              colors = {product.colors}
-              title = {product.title}
-              description = {product.description}
-              price = {product.price}
-              position = "center"
-            />
-          </div>
-        )}        
+               
       </div>
     </div>
-  </main>
+  </MainContainer>
 </Layout>

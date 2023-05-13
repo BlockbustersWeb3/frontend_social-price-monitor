@@ -5,7 +5,7 @@ import { addressWallet, setAddressWallet } from '../storage/sesion.js'
 export default function NavbarDashboard(props) {
 
 
-  console.log(addressWallet);
+  // console.log(addressWallet);
 
   async function disconnectWallet(){
     setAddressWallet("")

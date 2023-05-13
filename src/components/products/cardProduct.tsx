@@ -55,9 +55,9 @@ export default function CardProduct({
               <ProductBadge colors={colors} />
             } */}
 
-            {!(description || colors || color) &&
+            {/* {!(description || colors || color) &&
               <a href="#" className="font-weight-normal text-body text-sm">Shop Now</a>
-            }
+            } */}
             <button className="btn btn-dark me-2" type="button">Report</button>
             <button className="btn btn-dark me-2" type="button">Track</button>
           </div>
