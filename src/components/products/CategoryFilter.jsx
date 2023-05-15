@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../store/firebase'
 import { db } from '../store/firebase';
-import { collection, query, doc, getDocs, where } from "firebase/firestore";
+import { collection, query, doc, getDocs, where, updateDoc, setDoc, arrayUnion } from "firebase/firestore";
 import CardProduct from '../products/cardProduct';
+import { addressWallet } from '/src/storage/sesion.js'
 
 function CategoryFilter(props) {
 
@@ -55,6 +56,17 @@ function CategoryFilter(props) {
     });
     
     setProducts(listOfProducts)
+  }
+
+  async function TrackProduct(id){
+    console.log("Filter detecting tracking of product: ", id)
+    console.log(addressWallet.value)
+    console.log(addressWallet)
+
+    const docRef = doc(db, 'users', '0xaD15200e1200388D6b6f642805FFe77214E2Bf31');
+    await updateDoc(docRef, {
+      tracking: id
+    });
   }
 
   useEffect(() => {
@@ -118,9 +130,10 @@ function CategoryFilter(props) {
               {
                 products.length > 0?
                   products.map(product => 
-                    <div className="col-md-6 col-lg-3" key={product.id}>
+                    // <div className="col-md-5 col-lg-5" key={product.id}>
                       <CardProduct
                         key={product.id}
+                        id={product.id}
                         thumb_src = {product.thumb_src}
                         thumb_alt = {product.thumb_alt}
                         // color = {product.color}
@@ -129,8 +142,9 @@ function CategoryFilter(props) {
                         description = {product.description}
                         price = {product.price}
                         position = "center"
+                        track = {TrackProduct}
                       />
-                    </div>
+                    // </div>
                   )
                   :
                   <></>

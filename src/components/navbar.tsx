@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ethers } from 'ethers'
 import { addressWallet, setAddressWallet } from '../storage/sesion.js'
 
@@ -8,33 +8,58 @@ export default function Navbar(props) {
    * Request access to the User's META MASK WALLET
    */
   async function requestAccount() {
+    console.log("Requesting account: ", window.ethereum.isConnected())
     //Check if the Meta Mask Extensions exists
     if(window.ethereum){
-      
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      })
-      setAddressWallet(accounts[0])
+      try{
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        })
+        console.log("Setting...", accounts[0])
+        setAddressWallet(accounts[0])
+        return true;
+      }catch(e){
+        console.log(e)
+      }
+      return false;
     }else{
       console.log("Meta Mask not detected")
+      return false;
     }
   }
 
   async function connectWallet(){
+    console.log("connecting wallet")
     if(addressWallet.value != ""){
       console.log("Redirecting to the products home");
       window.location.href = "/product-home";
     }else{
       if(typeof window.ethereum !== 'undefined'){
       
-        await requestAccount();
+        let response = await requestAccount();
         //Provider to interact with the smart contract
         //const provider = new ethers.providers.Web3Provider(window.ethereum)
         // const web3Provider = new ethers.BrowserProvider(window.ethereum);
-        window.location.href = "/product-home";
+        if(response){
+          window.location.href = "/product-home";
+        }else{
+          console.log("Problemas al establecer la conexion con la wallet")
+        }
+        
       }
     }
   }
+
+  // useEffect(() => {
+  //   console.log("["+addressWallet.value+"]" )
+  //   if(addressWallet.value != ""){
+  //     // window.location.href = "/product-home";
+  //   }
+  
+  //   return () => {
+  //   }
+  // }, [addressWallet])
+  
 
   return (
     <nav className="navbar navbar-expand-lg blur border-radius-sm top-0 z-index-3 shadow position-sticky py-3 start-0 end-0">

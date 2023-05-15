@@ -19,14 +19,25 @@ export default function CardProduct({
   price,
   color,
   colors,
-  position
+  position,
+  id,
+  track
 }: Props) {
 
   const classList = "card-body " + "text-" + position;
 
+  async function onClickTrack(){
+    console.log("Tracking proudct: ", id)
+    track(id)
+  }
+
+  function onClickReport(){
+    console.log("Report button clicked")
+  }
+
   return (
     <>
-      <div className="card card-product border border-white mb-5 shadow-xs">
+      <div className="card card-product border border-white mb-4 shadow-xs">
         <a href="#">
           <div className="height-300">
             <img className="w-100 h-100 rounded-top" src={thumb_src} alt={thumb_alt} />
@@ -58,8 +69,8 @@ export default function CardProduct({
             {/* {!(description || colors || color) &&
               <a href="#" className="font-weight-normal text-body text-sm">Shop Now</a>
             } */}
-            <button className="btn btn-dark me-2" type="button">Report</button>
-            <button className="btn btn-dark me-2" type="button">Track</button>
+            <button className="btn btn-dark me-2" type="button" onClick={onClickReport}>Report</button>
+            <button className="btn btn-dark me-2" type="button" onClick={onClickTrack}>Track</button>
           </div>
         </a>
       </div>
