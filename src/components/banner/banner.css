@@ -1,0 +1,43 @@
+
+
+.banner {
+    position: relative;
+    background-color: #fff;
+    background-position: center;
+    background-size: cover;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+    min-width: 90vw;
+    justify-content: center;
+    
+  }
+
+
+  .banner__content {
+    padding: 0 20px;
+    text-align: center;
+  }
+  
+  .banner__title {
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 10px;
+    
+  }
+  
+  .banner__description {
+    font-size: 1.25em;
+    line-height: 1.5;
+    color: #fff;
+  }
+
+  @media (min-width: 1400px) {
+
+    .container{
+      max-width: 100% !important;
+    }
+
+
+  }

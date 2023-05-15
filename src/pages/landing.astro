@@ -11,6 +11,7 @@ import PromoSectionLarge from '../components/promo/promoSectionLarge';
 import MainContainer from '../components/authentication/MainContainer';
 import { ethers } from 'ethers';
 import InteractiveButton from '../components/authentication/InteractiveButton';
+import Banner from '../components/banner/Banner';
 ---
 
 
@@ -46,6 +47,12 @@ import InteractiveButton from '../components/authentication/InteractiveButton';
       pageHeaderBgImg={"https://images.unsplash.com/photo-1572402123736-c79526db405a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"}
       pageHeaderMinVh="90vh"
     />
+
+    <Banner client:load title="How it works"
+       description="A decentralized application (Dapp) that runs on Ethereum that allows a local community to track prices for chosen products and then take communioty or legal actions or help saving some money when buying those products. We looked at a decentralized solution since it could serve as a legal proof for legal actions, every action is public, each price report will be validated by randomnly assigned validators." 
+       bannerImage="https://i.pinimg.com/564x/0f/49/62/0f49622abdacc198ec9017d89839c65c.jpg"/>
+
+
     <div class="container my-5">
       <div class="row">
         <div class="col-lg-8 mx-auto">
