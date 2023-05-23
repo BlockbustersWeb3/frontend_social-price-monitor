@@ -21,7 +21,8 @@ export default function CardProduct({
   colors,
   position,
   id,
-  track
+  track,
+  report
 }: Props) {
 
   const classList = "card-body " + "text-" + position;
@@ -33,6 +34,7 @@ export default function CardProduct({
 
   function onClickReport(){
     console.log("Report button clicked")
+    report(id)
   }
 
   return (

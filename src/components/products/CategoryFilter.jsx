@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../store/firebase'
 import { db } from '../store/firebase';
-import { collection, query, doc, getDocs, where, updateDoc, setDoc, arrayUnion } from "firebase/firestore";
+import { setProductSelected } from '../../storage/sesion'
+import { collection, query, doc, getDocs, where, updateDoc } from "firebase/firestore";
 import CardProduct from '../products/cardProduct';
 import { addressWallet } from '/src/storage/sesion.js'
 
@@ -67,6 +68,12 @@ function CategoryFilter(props) {
     await updateDoc(docRef, {
       tracking: id
     });
+  }
+
+  function ReportPrice(id){
+    console.log("Reporting price of: "+id)
+    setProductSelected(id)
+    window.location.href = "/product"
   }
 
   useEffect(() => {
@@ -143,6 +150,7 @@ function CategoryFilter(props) {
                         price = {product.price}
                         position = "center"
                         track = {TrackProduct}
+                        report = {ReportPrice}
                       />
                     // </div>
                   )
