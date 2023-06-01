@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react'
 import { ethers } from 'ethers'
-import { addressWallet, setAddressWallet } from '../storage/sesion.js'
+import { addressWallet, setAddressWallet } from '../sesion.js'
 
-export default function Navbar(props) {
+const Navbar = (props) => {
+
+  // const addressWallet = useStore(addressWallet)
 
   /**
    * Request access to the User's META MASK WALLET
    */
   async function requestAccount() {
-    console.log("Requesting account: ", window.ethereum.isConnected())
     //Check if the Meta Mask Extensions exists
     if(window.ethereum){
       try{
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         })
-        console.log("Setting...", accounts[0])
+        
+        // setAddressWallet(accounts[0])
         setAddressWallet(accounts[0])
+        console.log("new address...", accounts[0])
         return true;
       }catch(e){
         console.log(e)
@@ -28,11 +31,14 @@ export default function Navbar(props) {
     }
   }
 
+  function showAddress(){
+    console.log("wallet ", addressWallet.get())
+  } 
+
   async function connectWallet(){
-    console.log("connecting wallet")
-    if(addressWallet.value != ""){
+    if(addressWallet.get() != "" && typeof(addressWallet.get()) != 'undefined'){
       console.log("Redirecting to the products home");
-      window.location.href = "/product-home";
+      window.location.href = "/home/products";
     }else{
       if(typeof window.ethereum !== 'undefined'){
       
@@ -41,25 +47,15 @@ export default function Navbar(props) {
         //const provider = new ethers.providers.Web3Provider(window.ethereum)
         // const web3Provider = new ethers.BrowserProvider(window.ethereum);
         if(response){
-          window.location.href = "/product-home";
+          console.log(response)
+          window.location.href = "/home/products";
         }else{
           console.log("Problemas al establecer la conexion con la wallet")
         }
         
       }
     }
-  }
-
-  // useEffect(() => {
-  //   console.log("["+addressWallet.value+"]" )
-  //   if(addressWallet.value != ""){
-  //     // window.location.href = "/product-home";
-  //   }
-  
-  //   return () => {
-  //   }
-  // }, [addressWallet])
-  
+  }  
 
   return (
     <nav className="navbar navbar-expand-lg blur border-radius-sm top-0 z-index-3 shadow position-sticky py-3 start-0 end-0">
@@ -80,7 +76,7 @@ export default function Navbar(props) {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-dark font-weight-bold d-flex align-items-center me-2 " aria-current="page" href="#">
+              <a onClick={showAddress} className="nav-link text-dark font-weight-bold d-flex align-items-center me-2 " aria-current="page" href="#">
                 Team
               </a>
             </li>
@@ -89,7 +85,7 @@ export default function Navbar(props) {
                 aria-current="page"
                 id="btn-connection-wallet"
                 onClick={connectWallet}>
-                  {addressWallet.value != ""? "Go to products" : "Connect Wallet"}
+                  {addressWallet.get() != "" && typeof(addressWallet.get()) != 'undefined'? "Go to products" : "Connect Wallet"}
               </button>
             </li>
           </ul>
@@ -138,4 +134,4 @@ export default function Navbar(props) {
 //   );
 // };
 
-// export default Navbar;
+export default Navbar;

@@ -1,17 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import data from '../../public/data.json';
-import '../../assets/scss/astro-ecommerce.scss';
-import CardCategory from '../components/products/cardCategory';
-import ProductFeature from '../components/products/productFeature';
-import Navbar from '../components/navbar';
-import StoreDoubleColumn from '../components/store/storeDoubleColumn';
-import TestimonialsFade from '../components/promo/testimonialsFade';
-import PromoSectionLarge from '../components/promo/promoSectionLarge';
-import MainContainer from '../components/authentication/MainContainer';
+import Layout from '../../layouts/Layout.astro';
+import data from '../../../public/data.json';
+import '../../../assets/scss/astro-ecommerce.scss';
+import CardCategory from '../../components/products/cardCategory';
+import ProductFeature from '../../components/products/productFeature';
+import StoreDoubleColumn from '../../components/store/storeDoubleColumn';
+import TestimonialsFade from '../../components/promo/testimonialsFade';
+import PromoSectionLarge from '../../components/promo/promoSectionLarge';
+import MainContainer from '../../components/authentication/MainContainer';
 import { ethers } from 'ethers';
-import InteractiveButton from '../components/authentication/InteractiveButton';
-import Banner from '../components/banner/Banner';
+import InteractiveButton from '../../components/authentication/InteractiveButton';
+import Banner from '../../components/banner/Banner';
 ---
 
 
@@ -31,16 +30,12 @@ import Banner from '../components/banner/Banner';
       console.log("Meta Mask not detected")
     }
   }
-
-  
-
   //document.getElementById('btn-connection-wallet').addEventListener("click", connectWallet);
 </script>
 
 <Layout title="Social Price monitoring">
   <MainContainer client:load>
     <!-- <InteractiveButton/> -->
-    <Navbar client:load/>
     <PromoSectionLarge 
       title={"social Price Monitoring"}
       full_description={data.products[0].full_description}  
@@ -107,6 +102,4 @@ import Banner from '../components/banner/Banner';
 
     </div>
   </MainContainer>
-    
-
 </Layout>

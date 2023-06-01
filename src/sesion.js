@@ -1,7 +1,7 @@
-import { atom } from 'nanostores';
+import { persistentAtom } from '@nanostores/persistent'
 
-export const addressWallet = atom("");
-export const idProductoSelected = atom(-1);
+export const addressWallet = persistentAtom("");
+export const idProductoSelected = persistentAtom(-1);
 
 export function setAddressWallet(address){
   addressWallet.set(address);

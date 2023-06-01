@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../store/firebase'
 import { db } from '../store/firebase';
-import { setProductSelected } from '../../storage/sesion'
+import { addressWallet, setProductSelected } from '../../sesion'
 import { collection, query, doc, getDocs, where, updateDoc } from "firebase/firestore";
 import CardProduct from '../products/cardProduct';
-import { addressWallet } from '/src/storage/sesion.js'
 
 function CategoryFilter(props) {
 
@@ -73,7 +72,8 @@ function CategoryFilter(props) {
   function ReportPrice(id){
     console.log("Reporting price of: "+id)
     setProductSelected(id)
-    window.location.href = "/product"
+    {/* window.location.href = "/home/product-detail" */}
+    window.location.href = `/product/${id}`
   }
 
   useEffect(() => {

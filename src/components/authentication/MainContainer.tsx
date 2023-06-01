@@ -10,6 +10,8 @@ const SmartContractLocalIP = "http://127.0.0.1:8545/"
 
 export default function MainContainer(props) {
 
+  const [currentWallet, setWallet] = useState("")
+
   async function fetchContract() {
     if(typeof window.ethereum != 'undefined'){
 
@@ -20,7 +22,7 @@ export default function MainContainer(props) {
       const provider = new JsonRpcProvider(SmartContractLocalIP);
       const contract = new ethers.Contract(priceMonitorAddress, contractABI, provider)
       try{
-        const data = await contract.getProduct(1)
+        const data = await contract.getProduct(0)
         console.log(data)
       }catch(err){
         console.log("Error: ", err)
@@ -50,8 +52,9 @@ export default function MainContainer(props) {
   }
 
   useEffect(() => {
+    console.log("Main container loaded")
     fetchContract()
-    // addProduct("Salchicha","Zenu","Salchica rica hahah")
+    addProduct("Salchicha","Zenu","Salchica con queso Zenu")
     return () => {}
   }, [])
   

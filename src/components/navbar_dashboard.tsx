@@ -1,15 +1,16 @@
 import React from 'react'
 import { Wallet, ethers } from 'ethers'
-import { addressWallet, setAddressWallet } from '../storage/sesion.js'
+import { addressWallet, setAddressWallet } from '../sesion.js'
 
 export default function NavbarDashboard(props) {
 
-
-  // console.log(addressWallet);
+  function showAddress(){
+    console.log("Address:", addressWallet.get())
+  }
 
   async function disconnectWallet(){
     setAddressWallet("")
-    window.location.href = "/landing";
+    window.location.href = "/";
   }
 
   return (
@@ -26,7 +27,12 @@ export default function NavbarDashboard(props) {
         <div className="collapse navbar-collapse" id="navigation">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <a className="nav-link text-dark font-weight-bold d-flex align-items-center me-2 " aria-current="page" href="/astro-ecommerce/">
+              <a className="nav-link text-dark font-weight-bold d-flex align-items-center me-2 " aria-current="page" href='/home/products'>
+                Productos
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link text-dark font-weight-bold d-flex align-items-center me-2 " aria-current="page" onClick={showAddress}>
                 Username
               </a>
             </li>
