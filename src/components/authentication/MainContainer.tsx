@@ -22,7 +22,7 @@ export default function MainContainer(props) {
       const provider = new JsonRpcProvider(SmartContractLocalIP);
       const contract = new ethers.Contract(priceMonitorAddress, contractABI, provider)
       try{
-        const data = await contract.getProduct(0)
+        const data = await contract.getAllProducts()
         console.log(data)
       }catch(err){
         console.log("Error: ", err)
@@ -48,12 +48,13 @@ export default function MainContainer(props) {
       const transaction  = await contract.addProduct(name, brand, description)
       await transaction.wait()
       console.log("New product")
+      fetchContract()
     }
   }
 
   useEffect(() => {
     console.log("Main container loaded")
-    fetchContract()
+    // fetchContract()
     addProduct("Salchicha","Zenu","Salchica con queso Zenu")
     return () => {}
   }, [])

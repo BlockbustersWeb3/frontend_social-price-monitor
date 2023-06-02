@@ -138,8 +138,9 @@ function CategoryFilter(props) {
                 products.length > 0?
                   products.map(product => 
                     // <div className="col-md-5 col-lg-5" key={product.id}>
-                      <CardProduct
-                        key={product.id}
+                    <a href={`/home/product/${product.handle}`} key={product.id}>
+                      <button>{product.title}</button>
+                      {/* <CardProduct
                         id={product.id}
                         thumb_src = {product.thumb_src}
                         thumb_alt = {product.thumb_alt}
@@ -151,7 +152,8 @@ function CategoryFilter(props) {
                         position = "center"
                         track = {TrackProduct}
                         report = {ReportPrice}
-                      />
+                      /> */}
+                    </a>
                     // </div>
                   )
                   :
