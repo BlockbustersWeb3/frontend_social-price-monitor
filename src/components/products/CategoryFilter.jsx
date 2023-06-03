@@ -2,21 +2,55 @@ import React, { useState, useEffect, useRef } from 'react'
 import '../store/firebase'
 import { db } from '../store/firebase';
 import { addressWallet, setProductSelected } from '../../sesion'
+import { ethers, JsonRpcProvider } from "ethers";
+import contractABI from '../store/abi.json'
 import { collection, query, doc, getDocs, where, updateDoc } from "firebase/firestore";
 import CardProduct from '../products/cardProduct';
+
+const priceMonitorAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+const SmartContractLocalIP = "http://127.0.0.1:8545/"
+
+const TITLE = 0
+const BRAND = 1
+const DESCRIPTION = 2
 
 function CategoryFilter(props) {
 
   const [categories, setCategories] = useState("")
+  const [productsFiltered, setProductsFiltered] = useState([])
   const [products, setProducts] = useState([])
+  const [productsFirebase, setProductsFirebase] = useState([])
   const selectedCategories = useRef([])
+  
+  async function getAllProducts() {
+    if(typeof window.ethereum != 'undefined'){
 
-  async function getCategories() {
+      //By using the provider object we’re ready to retrieve a reference to the SC
+      //on the blockchain by creating a new ethers.Contract object.
+      // const provider = new BrowserProvider(window.ethereum)
+      const provider = new JsonRpcProvider(SmartContractLocalIP);
+      const contract = new ethers.Contract(priceMonitorAddress, contractABI, provider)
+      try{
+        const data = await contract.getAllProducts()
+        const productsFromContract = data.filter(item => {
+          if(item[TITLE] != '' || item[BRAND] != '' || item[DESCRIPTION] != ''){
+            return item
+          }
+        })
+        setProducts(productsFromContract)
+        setProductsFiltered(productsFromContract)
+        console.log("Products from contract", productsFromContract)
+      }catch(err){
+        console.log("Error: ", err)
+      }
+    }
+  }
+
+  async function getCategoriesFromFirebase() {
     const q = query(collection(db, "categories"))
     const querySnapshot = await getDocs(q)
     let listOfCategories = []
     querySnapshot.forEach((doc) => {
-      // console.log(doc.id, " => ", doc.data()['title']);
       let category = {"id":doc.id, "title":doc.data()['title']}
       listOfCategories.push(category);
     });
@@ -32,18 +66,22 @@ function CategoryFilter(props) {
     }else{
       selectedCategories.current = selectedCategories.current.filter(function(c) {return c.id != id})
     }
-    await getProducts()
+    await getProductsFromFirebase()
   }
 
-  async function getProducts() {
+  /**
+   * Get products from firebase
+   */
+  async function getProductsFromFirebase() {
     let myQuery;
+    let isFiltered = false;
     console.log(selectedCategories.current.length)
     if(selectedCategories.current.length == 0){
-      myQuery = query(collection(db, "products"));
+      myQuery = query(collection(db, "products_blockchain"));
     }else{
       let IDs = selectedCategories.current.map(function(c){return c.id})
-      console.log(IDs)
-      myQuery = query(collection(db, "products"), where("category", "in", IDs));
+      myQuery = query(collection(db, "products_blockchain"), where("category", "in", IDs));
+      isFiltered = true
     }
 
     console.log("Getting products...")
@@ -54,8 +92,20 @@ function CategoryFilter(props) {
       data['id'] = p.id
       listOfProducts.push(data);
     });
-    
-    setProducts(listOfProducts)
+    console.log("Products from Firebase", listOfProducts)
+    setProductsFirebase(listOfProducts)
+
+    if(isFiltered){
+      let productsUpdated = []
+      for (let index = 0; index < listOfProducts.length; index++) {
+        const element = listOfProducts[index];
+        productsUpdated.push(products[Number(element.id)])
+      }      
+      setProductsFiltered(productsUpdated)
+    }else{
+      console.log("Setting: ", products)
+      setProductsFiltered(products)
+    }
   }
 
   async function TrackProduct(id){
@@ -77,8 +127,15 @@ function CategoryFilter(props) {
   }
 
   useEffect(() => {
-    getCategories().catch(console.error)
-    getProducts().catch(console.error)
+    getProductsFromFirebase().catch(console.error)
+    return () => {
+    }
+  }, [products])
+  
+
+  useEffect(() => {
+    getAllProducts()
+    getCategoriesFromFirebase().catch(console.error)
     return () => {}
   },[])
   
@@ -133,28 +190,26 @@ function CategoryFilter(props) {
             </div>
           </div>
           <div className="col-12 col-md-8">
-            <div className="d-flex border border-3 rounded-3 border-dashed h-100">
+            <div className="border border-3 rounded-3 border-dashed h-100" style={{display:'flex', flexWrap:'wrap'}}>
               {
-                products.length > 0?
-                  products.map(product => 
-                    // <div className="col-md-5 col-lg-5" key={product.id}>
-                    <a href={`/home/product/${product.handle}`} key={product.id}>
-                      <button>{product.title}</button>
-                      {/* <CardProduct
-                        id={product.id}
-                        thumb_src = {product.thumb_src}
-                        thumb_alt = {product.thumb_alt}
+                productsFiltered.length > 0 && productsFirebase.length > 0?
+                  productsFiltered.map((product, index) => 
+                    <div className="col-md-6 col-lg-6"  key={index}>
+                      <CardProduct
+                        id={index}
+                        thumb_src = {productsFirebase[index].image_url}
+                        thumb_alt = "image of product"
                         // color = {product.color}
                         // colors = {product.colors}
-                        title = {product.title}
-                        description = {product.description}
-                        price = {product.price}
+                        title = {product[TITLE]}
+                        description = {product[DESCRIPTION]}
+                        // price = {product.price}
+                        url={`/home/product/${index}`}
                         position = "center"
                         track = {TrackProduct}
                         report = {ReportPrice}
-                      /> */}
-                    </a>
-                    // </div>
+                      />
+                    </div>
                   )
                   :
                   <></>

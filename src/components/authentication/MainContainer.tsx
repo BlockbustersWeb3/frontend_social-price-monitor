@@ -55,7 +55,7 @@ export default function MainContainer(props) {
   useEffect(() => {
     console.log("Main container loaded")
     // fetchContract()
-    addProduct("Salchicha","Zenu","Salchica con queso Zenu")
+    // addProduct("Salchicha","Zenu","Salchica con queso Zenu")
     return () => {}
   }, [])
   

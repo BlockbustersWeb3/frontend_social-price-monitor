@@ -41,7 +41,7 @@ export default function CardProduct({
     <>
       <div className="card card-product border border-white mb-4 shadow-xs">
         <a href="#">
-          <div className="height-300">
+          <div className="height-150">
             <img className="w-100 h-100 rounded-top" src={thumb_src} alt={thumb_alt} />
           </div>
           <div className={classList}>
