@@ -7,12 +7,12 @@ import contractABI from '../store/abi.json'
 import { collection, query, doc, getDocs, where, updateDoc } from "firebase/firestore";
 import CardProduct from '../products/cardProduct';
 
-const priceMonitorAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
-const SmartContractLocalIP = "http://127.0.0.1:8545/"
-
 const TITLE = 0
 const BRAND = 1
 const DESCRIPTION = 2
+
+const SMART_CONTACT_IP = "http://127.0.0.1:8545/"
+const PRICE_MONITOR_ADDRESS = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
 
 function CategoryFilter(props) {
 
@@ -28,8 +28,10 @@ function CategoryFilter(props) {
       //By using the provider object we’re ready to retrieve a reference to the SC
       //on the blockchain by creating a new ethers.Contract object.
       // const provider = new BrowserProvider(window.ethereum)
-      const provider = new JsonRpcProvider(SmartContractLocalIP);
-      const contract = new ethers.Contract(priceMonitorAddress, contractABI, provider)
+      const provider = new JsonRpcProvider(SMART_CONTACT_IP);
+      const contract = new ethers.Contract(PRICE_MONITOR_ADDRESS, contractABI, provider)
+      console.log("ip:", SMART_CONTACT_IP)
+      console.log("address:", PRICE_MONITOR_ADDRESS)
       try{
         const data = await contract.getAllProducts()
         const productsFromContract = data.filter(item => {
@@ -123,7 +125,7 @@ function CategoryFilter(props) {
     console.log("Reporting price of: "+id)
     setProductSelected(id)
     {/* window.location.href = "/home/product-detail" */}
-    window.location.href = `/product/${id}`
+    window.location.href = `/home/product/${id}`
   }
 
   useEffect(() => {
@@ -197,7 +199,7 @@ function CategoryFilter(props) {
                     <div className="col-md-6 col-lg-6"  key={index}>
                       <CardProduct
                         id={index}
-                        thumb_src = {productsFirebase[index].image_url}
+                        thumb_src = {productsFirebase[index].images[0].src}
                         thumb_alt = "image of product"
                         // color = {product.color}
                         // colors = {product.colors}
