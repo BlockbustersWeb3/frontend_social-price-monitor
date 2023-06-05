@@ -72,7 +72,7 @@ const { product, id } = Astro.props;
       <NavbarDashboard client:load></NavbarDashboard>
       <div class="container mt-5">
         <!-- <ProductOverviewrid  /> -->
-        <ProductOverview  />
+        <ProductOverview id={id} product={product} client:load/>
         <!-- colors={product[0].colors}
           images={product[0].images}
           title={product[0].title}

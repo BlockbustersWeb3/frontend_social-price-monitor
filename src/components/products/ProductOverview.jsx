@@ -3,21 +3,61 @@ import ProductBadge from './productBadge';
 import ProductRating from './productRating'
 import ProductGallery from './productGallery'
 import ProductSizes from './productSizes'
+import { useEffect } from 'react';
+import { doc, getDoc } from "firebase/firestore";
+import db from '../store/firebase';
+import { useState } from 'react';
 
-function ProductOverview(props) {
+export default function ProductOverview(props) {
+
+  const [productFirebase, setProductFirebase] = useState(null)
+
+  async function getDocument(documentId){
+    const docRef = doc(db, "/products_blockchain/"+documentId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setProductFirebase(docSnap.data())
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+
+  // async function getCategoriesFromFirebase() {
+  //   const q = query(collection(db, "categories"))
+  //   const querySnapshot = await getDocs(q)
+  //   let listOfCategories = []
+  //   querySnapshot.forEach((doc) => {
+  //     let category = {"id":doc.id, "title":doc.data()['title']}
+  //     listOfCategories.push(category);
+  //   });
+  //   console.log(listOfCategories)
+  //   setCategories(listOfCategories)
+  // }
+
+  useEffect(() => {
+    console.log("PROPS: ", props)
+    getDocument(props.id)
+  
+    return () => {}
+  }, [])
+  
+
   return (
     <>
     <div className="card card-product card-plain">
-      {(props.images && props.images.length != 0) && 
-      <ProductGallery images={props.images}/>
+      {(productFirebase && productFirebase.images.length != 0) && 
+      <ProductGallery images={productFirebase.images}/>
       }
       <div className="row mt-5">
         <div className="col-12 col-lg-8 border-end">
-          {(props.title && props.title.length != 0) && 
-            <h2>{props.title}</h2>
+          {(props.product[0] && props.product[0].length != 0) && 
+            <h2>{props.product[0]}</h2>
           }
-          {(props.full_description && props.full_description.length != 0) && 
-            <p>{props.full_description}</p>
+          {(props.product[2] && props.product[2].length != 0) && 
+            <p>{props.product[2]}</p>
           }
           {(props.highlights && props.highlights.length != 0) && 
            <>
@@ -48,7 +88,7 @@ function ProductOverview(props) {
             {(props.rating != 0) && 
             <>
               <h3 className="sr-only">Reviews</h3>
-              <ProductRating rating={props.rating} reviews={props.reviews} />
+              {/* <ProductRating rating={props.rating} reviews={props.reviews} /> */}
             </>
             }
             {(props.colors && props.colors.length != 0) && 
@@ -65,7 +105,7 @@ function ProductOverview(props) {
             {(props.sizes && props.sizes.size != 0) && 
               <ProductSizes sizes={props.sizes}/>
             }
-            <button className="btn btn-primary btn-lg w-100" type="submit">Add to cart</button>
+            <button className="btn btn-primary btn-lg w-100" type="submit">Report</button>
           </form>
         </div>
       </div>
@@ -73,5 +113,3 @@ function ProductOverview(props) {
     </>
   )
 }
-
-export default ProductOverview

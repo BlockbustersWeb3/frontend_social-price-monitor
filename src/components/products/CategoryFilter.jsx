@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import '../store/firebase'
-import { db } from '../store/firebase';
+import db from '../store/firebase';
 import { addressWallet, setProductSelected } from '../../sesion'
 import { ethers, JsonRpcProvider } from "ethers";
 import contractABI from '../store/abi.json'
